@@ -1,0 +1,4 @@
+name: EasyShopGUI
+version: '${project.version}'
+main: com.oraclerpg.easyshopgui.EasyShopGUI
+api-version: 1.17
