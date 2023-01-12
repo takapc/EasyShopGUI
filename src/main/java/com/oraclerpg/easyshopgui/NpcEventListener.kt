@@ -12,6 +12,8 @@ import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.inventory.ItemStack
+import java.lang.NullPointerException
 
 class NpcEventListener(private val plugin: EasyShopGUI) : Listener {
 
@@ -23,6 +25,13 @@ class NpcEventListener(private val plugin: EasyShopGUI) : Listener {
         val npc = CitizensAPI.getNPCRegistry().getNPC(entity) ?: return
         if (!e.player.isSneaking) {
             val gui = TradeGUI(npc.name)
+            try {
+                val selling = EasyShopGUI.instance.config.getList("${npc.uniqueId}selling") as ArrayList<LinkedHashMap<String, ArrayList<ItemStack>>>
+                val buying = EasyShopGUI.instance.config.getList("${npc.uniqueId}buying") as ArrayList<LinkedHashMap<String, ArrayList<ItemStack>>>
+            } catch (nullpo: NullPointerException) {
+                e.player.sendMessage("&cShopが存在しません!".colored())
+                return
+            }
             e.player.openInventory(gui.getMenu(npc).inventory)
         } else if (e.player.isSneaking) {
             if (!e.player.hasPermission("minecraft.command.tp")) return

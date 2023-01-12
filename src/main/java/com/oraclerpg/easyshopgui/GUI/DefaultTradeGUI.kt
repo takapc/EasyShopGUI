@@ -8,6 +8,7 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
+import java.lang.NullPointerException
 
 class TradeGUI(private val name: String) {
 
@@ -28,8 +29,8 @@ class TradeGUI(private val name: String) {
             var viewList = ArrayList<ItemStack>()
             var sellingList = ArrayList<ArrayList<ItemStack>>()
             var buyingList = ArrayList<ArrayList<ItemStack>>()
-            var selling: ArrayList<LinkedHashMap<String, ArrayList<ItemStack>>> = EasyShopGUI.instance.config.getList("${npc.uniqueId}selling") as ArrayList<LinkedHashMap<String, ArrayList<ItemStack>>>
-            var buying: ArrayList<LinkedHashMap<String, ArrayList<ItemStack>>> = EasyShopGUI.instance.config.getList("${npc.uniqueId}buying") as ArrayList<LinkedHashMap<String, ArrayList<ItemStack>>>
+            val selling = EasyShopGUI.instance.config.getList("${npc.uniqueId}selling") as ArrayList<LinkedHashMap<String, ArrayList<ItemStack>>>
+            val buying = EasyShopGUI.instance.config.getList("${npc.uniqueId}buying") as ArrayList<LinkedHashMap<String, ArrayList<ItemStack>>>
             for (i: HashMap<String, ArrayList<ItemStack>> in selling) {
                 for ((j, e) in i.values.withIndex()){
                     sellingList.add(e)
