@@ -5,9 +5,11 @@ import com.oraclerpg.easyshopgui.colored
 import net.citizensnpcs.api.npc.NPC
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.SkullMeta
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -48,11 +50,27 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
                 }
             })
         }
+        val creditStack = getPlayerHead(Bukkit.getOfflinePlayer("takap_c"))
+        val creditMeta = creditStack.itemMeta
+        creditMeta.setDisplayName("&b&lEasyShopGUI".colored())
+        val lore = ArrayList<String>()
+        lore.add("&eversion 0.1".colored())
+        lore.add("&eMade by takap_c".colored())
+        creditMeta.lore = lore
+        creditStack.itemMeta = creditMeta
+        val creditIcon = Icon(creditStack).apply {
+            addClickAction(object :ClickAction {
+                override fun execute(e: InventoryClickEvent) {
+                    e.isCancelled = true
+                }
+            })
+        }
 
         val holder = CustomHolder(27, npc.name).apply {
             for (i in 0..26) setIcon(i, broken)
             setIcon(11, plusIcon)
             setIcon(13, removeIcon)
+            setIcon(15, creditIcon)
         }
 
         return holder
@@ -82,15 +100,14 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
                         val item = e.inventory.getItem(i)
                         if (item != null && item.type != Material.AIR) items.add(item)
                     }
-                    Bukkit.getLogger().info(items.toString())
                     for (i in items) {
                         player.sendMessage(i.displayName())
                     }
                     val uuid = UUID.randomUUID()
+                    if (items.isEmpty()) return
                     map["sell$uuid"] = items
                     list.add(map)
                     var sellingList = EasyShopGUI.instance.config.getList("${npc.uniqueId}selling")
-                    Bukkit.getLogger().info(sellingList?.javaClass?.name)
                     if (sellingList is ArrayList) {
                         EasyShopGUI.instance.config.set("${npc.uniqueId}selling", list + sellingList)
                     } else {
@@ -134,14 +151,13 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
                         val item = e.inventory.getItem(i)
                         if (item != null && item.type != Material.AIR) items.add(item)
                     }
-                    Bukkit.getLogger().info(items.toString())
                     for (i in items) {
                         player.sendMessage(i.displayName())
                     }
+                    if (items.isEmpty()) return
                     map["buy$uuid"] = items
                     list.add(map)
                     val buyingList = EasyShopGUI.instance.config.getList("${npc.uniqueId}buying")
-                    Bukkit.getLogger().info(buyingList?.javaClass?.name)
                     if (buyingList is ArrayList) {
                         EasyShopGUI.instance.config.set("${npc.uniqueId}buying", list + buyingList)
                     } else {
@@ -222,7 +238,6 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
                         val tradeNumber = i - 9
                         val selling = EasyShopGUI.instance.config.getList("${npc.uniqueId}selling") as ArrayList<*>
                         val buying = EasyShopGUI.instance.config.getList("${npc.uniqueId}buying") as ArrayList<*>
-                        Bukkit.getLogger().info(selling.toString())
                         var dealNum = 0
                         for ((num, trade) in selling.withIndex()) {
                             if (trade is HashMap<*, *>) {
@@ -234,7 +249,6 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
                         }
                         selling.removeAt(dealNum)
                         buying.removeAt(dealNum)
-                        Bukkit.getLogger().info(selling.toString())
                         EasyShopGUI.instance.config.set("${npc.uniqueId}selling", selling)
                         EasyShopGUI.instance.config.set("${npc.uniqueId}buying", buying)
                         EasyShopGUI.instance.saveConfig()
@@ -252,5 +266,14 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
             for (i in 9..8 + icons.size) setIcon(i, icons[i - 9])
         }
         return holder
+    }
+    private fun getPlayerHead(player: OfflinePlayer): ItemStack {
+        val head = ItemStack(Material.PLAYER_HEAD)
+        val meta = head.itemMeta
+        if(meta is SkullMeta){
+            meta.owningPlayer = player
+            head.itemMeta = meta
+        }
+        return head
     }
 }

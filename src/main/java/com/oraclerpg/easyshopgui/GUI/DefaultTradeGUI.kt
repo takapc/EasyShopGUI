@@ -42,8 +42,6 @@ class TradeGUI(private val name: String) {
                 }
             }
             for (i in 9..8 + viewList.size) {
-                Bukkit.getLogger().info(sellingList[i-9].toString())
-                Bukkit.getLogger().info(viewList[i-9].toString())
                 var viewItem = ItemStack(viewList[i-9])
                 var viewMeta = viewItem.itemMeta
                 var lore = ArrayList<String>()
@@ -62,18 +60,26 @@ class TradeGUI(private val name: String) {
                 viewMeta.lore = lore
                 viewItem.setItemMeta(viewMeta)
                 val icon = Icon(viewItem)
-                Bukkit.getLogger().info("GUI起動時"+sellingList[i-9].toString())
                 icon.addClickAction( object : ClickAction {
                     override fun execute(e: InventoryClickEvent) {
                         val player = e.whoClicked as Player
-                        Bukkit.getLogger().info("購入判定前"+sellingList[i-9].toString())
                         for (buy in buyingList[i - 9]) {
                             if (!player.inventory.containsAtLeast(buy, buy.amount)) {
                                 player.sendMessage("&c十分な素材を持っていません!".colored())
                                 return
                             }
                         }
-                        Bukkit.getLogger().info(sellingList[i-9].toString())
+                        val playerItems = HashMap<Int, ItemStack>()
+                        for ((index,item) in player.inventory.withIndex()) {
+                            if (item != null) playerItems[index] = item
+                            player.inventory.setItem(index, null)
+                        }
+                        for (buy in buyingList[i-9]) {
+                            for (itemSet in playerItems) {
+                                if (itemSet.value.isSimilar(buy)) itemSet.value.amount -= buy.amount
+                                player.inventory.setItem(itemSet.key, itemSet.value)
+                            }
+                        }
                         for (item in sellingList[i-9]) {
                             player.inventory.addItem(item)
                         }
