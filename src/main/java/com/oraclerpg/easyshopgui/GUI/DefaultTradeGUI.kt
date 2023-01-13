@@ -7,6 +7,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import java.lang.NullPointerException
 
@@ -45,6 +46,9 @@ class TradeGUI(private val name: String) {
             for (i in 9..8 + viewList.size) {
                 var viewItem = ItemStack(viewList[i-9])
                 var viewMeta = viewItem.itemMeta
+                viewMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+                viewMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
+                viewMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
                 var lore = ArrayList<String>()
                 lore.add("&b&l==&e&lSales Item&b&l==".colored())
                 for ( t in sellingList[i-9]) {
