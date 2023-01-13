@@ -74,23 +74,35 @@ class TradeGUI(private val name: String) {
                         }
                         val playerItems = HashMap<Int, ItemStack>()
                         val buyingListWithIsFinished = HashMap<ItemStack, Boolean>()
+                        val nokori = ArrayList<Int>()
                         for ((index,item) in player.inventory.withIndex()) {
                             if (item != null) playerItems[index] = item
                             player.inventory.setItem(index, null)
                         }
                         for (buy in buyingList[i-9]) {
                             buyingListWithIsFinished[buy] = false
+                            nokori.add(buy.amount)
                         }
+                        var num = 0
                         for (buy in buyingListWithIsFinished) { //要求量を計算して余った分をプレイヤーに返す
                             for (item in playerItems) {
                                 if (item.value.isSimilar(buy.key) && !buy.value) {
-                                    item.value.amount -= buy.key.amount
+                                    if (item.value.amount <= nokori[num]) {
+                                        nokori[num] -= item.value.amount
+                                        item.value.amount = 0
+                                    } else {
+                                        if (nokori[num] > 0) {
+                                            item.value.amount -= nokori[num]
+                                            nokori[num] = 0
+                                        }
+                                    }
                                     player.inventory.setItem(item.key, item.value)
-                                    buyingListWithIsFinished[buy.key] = true
+                                    if (nokori[num] <= 0) buyingListWithIsFinished[buy.key] = true
                                 } else {
                                     player.inventory.setItem(item.key, item.value)
                                 }
                             }
+                            num++
                         }
                         for (item in sellingList[i-9]) {
                             player.inventory.addItem(item)
