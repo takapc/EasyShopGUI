@@ -64,6 +64,9 @@ class TradeGUI(private val name: String) {
                 }
                 viewMeta.lore = lore
                 viewItem.setItemMeta(viewMeta)
+                viewMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+                viewMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
+                viewMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
                 val icon = Icon(viewItem)
                 icon.addClickAction( object : ClickAction {
                     override fun execute(e: InventoryClickEvent) {
