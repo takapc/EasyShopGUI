@@ -107,14 +107,8 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
                     if (items.isEmpty()) return
                     map["sell$uuid"] = items
                     list.add(map)
-                    var sellingList = EasyShopGUI.instance.config.getList("${npc.uniqueId}selling")
-                    if (sellingList is ArrayList) {
-                        EasyShopGUI.instance.config.set("${npc.uniqueId}selling", list + sellingList)
-                    } else {
-                        EasyShopGUI.instance.config.set("${npc.uniqueId}selling", list)
-                    }
-                    EasyShopGUI.instance.saveConfig()
-                    player.openInventory(getAddRequiredItemMenu(uuid).inventory)
+                    val sellingList = EasyShopGUI.instance.config.getList("${npc.uniqueId}selling")
+                    player.openInventory(getAddRequiredItemMenu(uuid, list, sellingList).inventory)
                 }
             })
         }
@@ -127,7 +121,7 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
         return holder
     }
 
-    fun getAddRequiredItemMenu(uuid: UUID) : CustomHolder {
+    fun getAddRequiredItemMenu(uuid: UUID, sellingConfig: ArrayList<HashMap<String, ArrayList<ItemStack>>>, defaultConfig: MutableList<*>?) : CustomHolder {
         val stack = CustomItem().name("").type(Material.RED_STAINED_GLASS_PANE).getItemStack()
 
         val broken = Icon(stack).apply {
@@ -162,6 +156,11 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
                         EasyShopGUI.instance.config.set("${npc.uniqueId}buying", list + buyingList)
                     } else {
                         EasyShopGUI.instance.config.set("${npc.uniqueId}buying", list)
+                    }
+                    if (defaultConfig is ArrayList) {
+                        EasyShopGUI.instance.config.set("${npc.uniqueId}selling", sellingConfig + defaultConfig)
+                    } else {
+                        EasyShopGUI.instance.config.set("${npc.uniqueId}selling", sellingConfig)
                     }
                     EasyShopGUI.instance.saveConfig()
                     player.openInventory(getAllManageMenu().inventory)

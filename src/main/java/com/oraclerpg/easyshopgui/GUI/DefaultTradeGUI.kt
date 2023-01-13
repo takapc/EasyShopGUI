@@ -64,21 +64,32 @@ class TradeGUI(private val name: String) {
                 icon.addClickAction( object : ClickAction {
                     override fun execute(e: InventoryClickEvent) {
                         val player = e.whoClicked as Player
+                        val isFinishedBuying = ArrayList<Boolean>()
                         for (buy in buyingList[i - 9]) {
                             if (!player.inventory.containsAtLeast(buy, buy.amount)) {
                                 player.sendMessage("&c十分な素材を持っていません!".colored())
                                 return
                             }
+                            isFinishedBuying.add(false)
                         }
                         val playerItems = HashMap<Int, ItemStack>()
+                        val buyingListWithIsFinished = HashMap<ItemStack, Boolean>()
                         for ((index,item) in player.inventory.withIndex()) {
                             if (item != null) playerItems[index] = item
                             player.inventory.setItem(index, null)
                         }
                         for (buy in buyingList[i-9]) {
-                            for (itemSet in playerItems) {
-                                if (itemSet.value.isSimilar(buy)) itemSet.value.amount -= buy.amount
-                                player.inventory.setItem(itemSet.key, itemSet.value)
+                            buyingListWithIsFinished[buy] = false
+                        }
+                        for (buy in buyingListWithIsFinished) { //要求量を計算して余った分をプレイヤーに返す
+                            for (item in playerItems) {
+                                if (item.value.isSimilar(buy.key) && !buy.value) {
+                                    item.value.amount -= buy.key.amount
+                                    player.inventory.setItem(item.key, item.value)
+                                    buyingListWithIsFinished[buy.key] = true
+                                } else {
+                                    player.inventory.setItem(item.key, item.value)
+                                }
                             }
                         }
                         for (item in sellingList[i-9]) {
