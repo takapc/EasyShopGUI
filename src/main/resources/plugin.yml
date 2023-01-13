@@ -7,3 +7,13 @@ depend: [Citizens]
 commands:
   create:
     usage: Create your own NPC.
+
+permissions:
+  easyshopgui.*:
+    default: op
+    description: All permission in this plugin
+    children:
+      easyshopgui.trade: true
+  easyshopgui.trade:
+    default: op
+    description: Need manage trade menu

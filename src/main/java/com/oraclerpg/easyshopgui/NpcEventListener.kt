@@ -34,7 +34,10 @@ class NpcEventListener(private val plugin: EasyShopGUI) : Listener {
             }
             e.player.openInventory(gui.getMenu(npc).inventory)
         } else if (e.player.isSneaking) {
-            if (!e.player.hasPermission("minecraft.command.tp")) return
+            if (!e.player.hasPermission("easyshopgui.trade")) {
+                e.player.sendMessage("&cYou don't have manage permission".colored())
+                return
+            }
             val gui = ManageTradeGUI(npc, plugin)
             plugin.config.set("Listener", "working")
             e.player.openInventory(gui.getAllManageMenu().inventory)
