@@ -11,6 +11,7 @@ You can custom easily trades.
 
 ### How to use
 Create a NPC by /npc create <name>
+Need permission of `easyshopgui.trade` to open manage menu!
 
 #### Add trading
 1. Right click on the NPC while sneaking
@@ -22,6 +23,10 @@ Create a NPC by /npc create <name>
 1. Right click on the NPC while sneaking
 2. Select "Remove a trade"
 3. Click a trade you want to remove
+  
+#### Do trading
+1. Right click on the NPC while not sneakig
+2. Click a trade you want to do
 
 ## Japanese
 
@@ -34,6 +39,7 @@ Create a NPC by /npc create <name>
 
 ### 使い方
 /npc create <name> で任意のNPCをスポーンさせてください
+管理画面を開くには`easyshopgui.trade`の権限が必要です!
 
 #### トレードの追加
 1. シフトしながらNPCを右クリック
@@ -46,3 +52,6 @@ Create a NPC by /npc create <name>
 2. "Remove a trade"というアイコンをクリック
 3. 削除したいトレードをクリック
 
+#### トレードの実行
+1. シフトせずにNPCを右クリック
+2. 実行したいトレードをクリック
