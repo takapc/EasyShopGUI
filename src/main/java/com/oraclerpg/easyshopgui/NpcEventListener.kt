@@ -29,7 +29,7 @@ class NpcEventListener(private val plugin: EasyShopGUI) : Listener {
                 val selling = EasyShopGUI.instance.config.getList("${npc.uniqueId}selling") as ArrayList<LinkedHashMap<String, ArrayList<ItemStack>>>
                 val buying = EasyShopGUI.instance.config.getList("${npc.uniqueId}buying") as ArrayList<LinkedHashMap<String, ArrayList<ItemStack>>>
             } catch (nullpo: NullPointerException) {
-                e.player.sendMessage("&cShopが存在しません!".colored())
+                e.player.sendMessage("&cDon't exist any shop!".colored())
                 return
             }
             e.player.openInventory(gui.getMenu(npc).inventory)

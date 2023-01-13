@@ -32,7 +32,7 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
             })
         }
 
-        val plusStack = CustomItem().name("&a&lトレードを追加".colored()).type(Material.DIAMOND_SWORD).getItemStack()
+        val plusStack = CustomItem().name("&a&lAdd a trade".colored()).type(Material.DIAMOND_SWORD).getItemStack()
         val plusIcon = Icon(plusStack).apply {
             addClickAction( object : ClickAction {
                 override fun execute(e: InventoryClickEvent) {
@@ -41,7 +41,7 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
                 }
             })
         }
-        val removeStack = CustomItem().name("&c&lトレードを削除".colored()).type(Material.BARRIER).getItemStack()
+        val removeStack = CustomItem().name("&c&lRemove a trade".colored()).type(Material.BARRIER).getItemStack()
         val removeIcon = Icon(removeStack).apply {
             addClickAction( object : ClickAction {
                 override fun execute(e: InventoryClickEvent) {
@@ -112,7 +112,7 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
                 }
             })
         }
-        val holder = CustomHolder(54, "取引後のアイテムを選択").apply {
+        val holder = CustomHolder(54, "Select sales items").apply {
             for (i in 0..8) setIcon(i, broken)
             for (i in 45..53) setIcon(i, broken)
             setIcon(49, done)
@@ -167,7 +167,7 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
                 }
             })
         }
-        val holder = CustomHolder(54, "取引前のアイテムを選択").apply {
+        val holder = CustomHolder(54, "Select require items").apply {
             for (i in 0..8) setIcon(i, broken)
             for (i in 45..53) setIcon(i, broken)
             setIcon(49, done)
@@ -217,13 +217,13 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
                     viewBuying.add(e)
                 }
             }
-            val viewItem = CustomItem().name("").stack(viewList[i-9]).addLore("&b&l==&e&l販売アイテム&b&l==")
+            val viewItem = CustomItem().name("").stack(viewList[i-9]).addLore("&b&l==&e&lSales item&b&l==")
             viewSelling[i-9].forEach {
                 var name = it.itemMeta.displayName
                 if (name.isEmpty()) name = it.type.name
                 viewItem.addLore("&f・${name} &bx${it.amount}")
             }
-            viewItem.addLore("&c&l==&e&l必要アイテム&c&l==")
+            viewItem.addLore("&c&l==&e&lRequire item&c&l==")
             viewBuying[i-9].forEach {
                 var name = it.itemMeta.displayName
                 if (name.isEmpty()) name = it.type.name
@@ -258,7 +258,7 @@ class ManageTradeGUI(private val npc: NPC, private var plugin: EasyShopGUI)  {
             icons.add(icon)
 
         }
-        val holder = CustomHolder(54, "削除したいトレードを選択").apply {
+        val holder = CustomHolder(54, "Select one you want to remove").apply {
             for (i in 0..8) setIcon(i, broken)
             for (i in 45..53) setIcon(i, broken)
             setCanPutItem(false)

@@ -46,13 +46,13 @@ class TradeGUI(private val name: String) {
                 var viewItem = ItemStack(viewList[i-9])
                 var viewMeta = viewItem.itemMeta
                 var lore = ArrayList<String>()
-                lore.add("&b&l==&e&l販売アイテム&b&l==".colored())
+                lore.add("&b&l==&e&lSales Item&b&l==".colored())
                 for ( t in sellingList[i-9]) {
                     var name = t.itemMeta.displayName
                     if (name.isEmpty()) name = t.type.name
                     lore.add("&f・$name &bx${t.amount}".colored())
                 }
-                lore.add("&c&l==&e&l必要アイテム&c&l==".colored())
+                lore.add("&c&l==&e&lRequire Item&c&l==".colored())
                 for ( t in buyingList[i-9]) {
                     var name = t.itemMeta.displayName
                     if (name.isEmpty()) name = t.type.name
@@ -67,7 +67,7 @@ class TradeGUI(private val name: String) {
                         val isFinishedBuying = ArrayList<Boolean>()
                         for (buy in buyingList[i - 9]) {
                             if (!player.inventory.containsAtLeast(buy, buy.amount)) {
-                                player.sendMessage("&c十分な素材を持っていません!".colored())
+                                player.sendMessage("&cYou don't have enough material!".colored())
                                 return
                             }
                             isFinishedBuying.add(false)
